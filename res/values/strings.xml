@@ -3,10 +3,10 @@
     <string name="app_name">中日助手</string>
     <string name="app_des">你值得拥有</string>
     
-    <string name="input_et_hint">请输入需要翻译的中文或英文...</string>
+    <string name="input_et_hint">请输入需要翻译的中文或日文...</string>
     <string name="translate">翻 译</string>
-    <string name="notice">输入中文翻译成英文,输入英文翻译成中文。可手动输入或者点击话筒用普通话说出需要翻译的内容，赶紧试试吧。</string>
-    <string name="input_below">请在下面输入需要翻译的中文或英文</string>
+    <string name="notice">输入中文翻译成日文,输入日文翻译成中文。可手动输入或者点击话筒用普通话说出需要翻译的内容，赶紧试试吧。</string>
+    <string name="input_below">请在下面输入需要翻译的中文或日文</string>
     <string name="app_id">50aa1213</string>
     <string name="preference_default_iat_engine_en">sms-en</string>
     <string name="preference_key_iat_rate">iat_rate</string>
@@ -32,8 +32,8 @@
         <item>关于我们</item>
     </string-array>
 
-    <string name="statement">\t本软件采用百度翻译结合科大讯飞的语音功能，方便快捷，省去繁琐的输入过程，对学习英文非常有帮助。
-        	\n\t带真人发音，可当做英语学习机，教孩子学英语，单词学习，英文发音学习，跟外国人沟通，出国旅游应急翻译等等。
+    <string name="statement">\t本软件采用百度翻译结合科大讯飞的语音功能，方便快捷，省去繁琐的输入过程，对学习日文非常有帮助。
+        	\n\t带真人发音，可当做英语学习机，教孩子学英语，单词学习，日文发音学习，跟外国人沟通，出国旅游应急翻译等等。
         	\n\t因为采用的是即时机器翻译，非人工翻译，准确度不可能百分百，是一个辅助工具。
         	\n\t欢迎使用，如有意见，可联系本人吐槽，对本软件进行不断优化。
     </string>
@@ -57,11 +57,11 @@
 	<string name="errcode_deny">发送被拒绝</string>
 	<string name="errcode_unknown">发送返回</string>
 	<string name="click_speak_chinese">中文</string>
-	<string name="click_speak_english">英文</string>
+	<string name="click_speak_english">日文</string>
 	<string name="collect">收藏</string>
 	<string name="wechat">微信</string>
 	<string name="speak">说</string>
-	<string name="speak_prompt">请根据您说的语言点击中文或者英文！</string>
+	<string name="speak_prompt">请根据您说的语言点击中文或者日文！</string>
 	
 	<string name="zyzs_prompt">让学习英语口语变得省时给力，近乎完美的情景对话模拟时时给你惊喜，成为当之无愧的英语学习利器。中英助手，充分激发英语潜能的“荷尔蒙”！ 你，还在等什么？！</string>
 	<string name="yyzs_prompt">国语和粤语的完美转换，让说粤语随心所欲，无视粤语电影电视剧的中文字幕，粤语歌曲统统不在话下。粤语助手，等你来show！</string>

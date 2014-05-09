@@ -139,7 +139,7 @@
 	                    android:background="@drawable/checkbox_language_right_selector"
 	                    android:button="@null"
 	                    android:gravity="center"
-	                    android:text="英语"
+	                    android:text="日语"
 	                    android:textColor="@drawable/tc_black_to_white_selector" />
                 </LinearLayout>
                 

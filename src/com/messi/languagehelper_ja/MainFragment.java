@@ -170,7 +170,6 @@ public class MainFragment extends Fragment implements OnClickListener, IWXAPIEve
 		}else{
 			cb_speak_language_ch.setChecked(false);
 			cb_speak_language_en.setChecked(true);
-			ToastUtil.diaplayMesShort(getActivity(), "请说英文");
 		}
 		speed = mSharedPreferences.getInt(getString(R.string.preference_key_tts_speed), 50);
 	}
@@ -204,10 +203,13 @@ public class MainFragment extends Fragment implements OnClickListener, IWXAPIEve
 			}
 			StatService.onEvent(getActivity(), "1.6_putonghuabtn", "普通话按钮", 1);
 		}else if (v.getId() == R.id.cb_speak_language_en) {
-			cb_speak_language_ch.setChecked(false);
-			setSpeakLanguage(XFUtil.VoiceEngineEN);
-			ToastUtil.diaplayMesShort(getActivity(), "请说英语");
-			StatService.onEvent(getActivity(), "1.6_yingyubtn", "英语按钮", 1);
+			cb_speak_language_ch.setChecked(true);
+			cb_speak_language_en.setChecked(false);
+			ToastUtil.diaplayMesShort(getActivity(), "日语识别，即将开通，敬请期待");
+//			cb_speak_language_ch.setChecked(false);
+//			setSpeakLanguage(XFUtil.VoiceEngineEN);
+//			ToastUtil.diaplayMesShort(getActivity(), "请说英语");
+//			StatService.onEvent(getActivity(), "1.6_yingyubtn", "英语按钮", 1);
 		}
 	}
 	

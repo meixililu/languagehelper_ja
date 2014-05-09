@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dip"
                 android:gravity="center_horizontal"
-                android:text="学英语，你值得拥有"
+                android:text="学日语，你值得拥有"
                 android:textColor="@color/text_grey"
                 android:textSize="@dimen/title" />
 
