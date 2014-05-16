@@ -46,6 +46,7 @@
             android:text="@string/about_speed_title"
             android:layout_marginLeft="7dp"
             android:layout_marginTop="7dp"
+            android:visibility="gone"
             />
         
         <TextView 
@@ -56,6 +57,7 @@
             android:text="@string/about_speed_content"
             android:layout_marginLeft="7dp"
             android:layout_marginTop="5dp"
+            android:visibility="gone"
             />
         
         <ImageView 
@@ -63,6 +65,7 @@
             android:layout_height="1px"
             android:background="@color/lightgrey"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             />
         
         <TextView 

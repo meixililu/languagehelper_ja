@@ -12,11 +12,10 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.baidu.mobstat.StatService;
 import com.messi.languagehelper_ja.util.ToastUtil;
-import com.messi.languagehelper_ja.wxapi.WXEntryActivity;
 
 public class RecommendActivity extends SherlockFragmentActivity implements OnClickListener {
 
-	private FrameLayout recommend_yyzs,recommend_zyzs;
+	private FrameLayout recommend_yyzs,recommend_zyzs,recommend_zyhy;
 	public ActionBar mActionBar;
 	
 	@Override
@@ -32,12 +31,14 @@ public class RecommendActivity extends SherlockFragmentActivity implements OnCli
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowHomeEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
-        mActionBar.setTitle("推荐应用");
+        mActionBar.setTitle("干货分享");
         
         recommend_yyzs = (FrameLayout) findViewById(R.id.recommend_yyzs);
         recommend_zyzs = (FrameLayout) findViewById(R.id.recommend_zyzs);
+        recommend_zyhy = (FrameLayout) findViewById(R.id.recommend_zyhy);
         recommend_yyzs.setOnClickListener(this);
         recommend_zyzs.setOnClickListener(this);
+        recommend_zyhy.setOnClickListener(this);
 	}
 	
 	@Override
@@ -61,7 +62,7 @@ public class RecommendActivity extends SherlockFragmentActivity implements OnCli
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			StatService.onEvent(RecommendActivity.this, "1.6_zyzsbtn", "点击中英助手按钮", 1);
+			StatService.onEvent(RecommendActivity.this, "1.0_zyzsbtn", "点击中英助手按钮", 1);
 			break;
 		case R.id.recommend_yyzs:
 			try {
@@ -71,7 +72,17 @@ public class RecommendActivity extends SherlockFragmentActivity implements OnCli
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			StatService.onEvent(RecommendActivity.this, "1.6_yyzsbtn", "点击粤语助手按钮", 1);
+			StatService.onEvent(RecommendActivity.this, "1.0_yyzsbtn", "点击粤语助手按钮", 1);
+			break;
+		case R.id.recommend_zyhy:
+			try {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("market://details?id=com.messi.languagehelper"));
+				startActivity(intent);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			StatService.onEvent(RecommendActivity.this, "1.0_zyhybtn", "点击中英互译按钮", 1);
 			break;
 		default:
 			break;

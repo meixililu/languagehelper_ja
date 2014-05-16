@@ -139,21 +139,21 @@ public class CollectedListItemAdapter extends BaseAdapter {
 				notifyDataSetChanged();
 				showToast("删除成功");
 				MainFragment.isRefresh = true;
-				StatService.onEvent(context, "1.6_deletebtn", "删除按钮", 1);
+				StatService.onEvent(context, "1.0_deletebtn", "删除按钮", 1);
 			}
 		});
 		holder.copy_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				copy(mBean.getAnswer());
-				StatService.onEvent(context, "1.6_copybtn", "复制按钮", 1);
+				StatService.onEvent(context, "1.0_copybtn", "复制按钮", 1);
 			}
 		});
 		holder.weixi_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				sendToWechat(mBean.getAnswer());
-				StatService.onEvent(context, "1.6_sharebtn", "分享按钮", 1);
+				StatService.onEvent(context, "1.0_sharebtn", "分享按钮", 1);
 			}
 		});
 		holder.collected_btn.setOnClickListener(new OnClickListener() {
@@ -161,7 +161,7 @@ public class CollectedListItemAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				updateCollectedStatus(mBean);
 				notifyDataSetChanged();
-				StatService.onEvent(context, "1.6_collectedbtn", "收藏按钮", 1);
+				StatService.onEvent(context, "1.0_collectedbtn", "收藏按钮", 1);
 			}
 		});
 		return convertView;
@@ -334,11 +334,11 @@ public class CollectedListItemAdapter extends BaseAdapter {
 				playLocalMP3(filepath,animationDrawable);
 			}
 			if(v.getId() == R.id.record_question_cover){
-				StatService.onEvent(context, "1.7_play_content", "点击翻译内容", 1);
+				StatService.onEvent(context, "1.0_play_content", "点击翻译内容", 1);
 			}else if(v.getId() == R.id.record_answer_cover){
-				StatService.onEvent(context, "1.7_play_result", "点击翻译结果", 1);
+				StatService.onEvent(context, "1.0_play_result", "点击翻译结果", 1);
 			}else if(v.getId() == R.id.voice_play_layout){
-				StatService.onEvent(context, "1.6_playvoicebtn", "播放按钮", 1);
+				StatService.onEvent(context, "1.0_playvoicebtn", "播放按钮", 1);
 			}
 		}
 	}

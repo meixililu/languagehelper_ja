@@ -8,13 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.baidu.mobstat.StatService;
 import com.messi.languagehelper_ja.util.ShortCut;
 import com.messi.languagehelper_ja.wxapi.WXEntryActivity;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.Animator.AnimatorListener;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 public class LoadingActivity extends Activity {
 	
@@ -22,7 +24,6 @@ public class LoadingActivity extends Activity {
 	private SharedPreferences mSharedPreferences;
 	private TextView app_name,subtitle;
 	private TranslateAnimation mHideAnimation;
-	private Animation fadein;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,8 @@ public class LoadingActivity extends Activity {
 		mHideAnimation = new TranslateAnimation(
 				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,  
                 Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -0.7f);
-		fadein = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 		mHideAnimation.setDuration(400);
 		mHideAnimation.setFillAfter(true);
-		fadein.setFillAfter(true);
 		mHideAnimation.setAnimationListener(new AnimationListener() {
 			@Override
 			public void onAnimationStart(Animation arg0) {
@@ -53,26 +52,39 @@ public class LoadingActivity extends Activity {
 			}
 			@Override
 			public void onAnimationEnd(Animation arg0) {
-				subtitle.setVisibility(View.VISIBLE);
-				subtitle.startAnimation(fadein);
-			}
-		});
-		fadein.setAnimationListener(new AnimationListener() {
-			@Override
-			public void onAnimationStart(Animation animation) {
-			}
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-			}
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				Intent intent = new Intent(LoadingActivity.this, WXEntryActivity.class);
-				startActivity(intent);
-				finish();
+				fadeAnimation();
 			}
 		});
 	}
+	
+	private void fadeAnimation(){
+		subtitle.setVisibility(View.VISIBLE);
+		ObjectAnimator mObjectAnimator = ObjectAnimator.ofFloat(subtitle, "alpha", 0, 1);
+		mObjectAnimator.addListener(mAnimatorListener);
+		mObjectAnimator.setDuration(400).start();
+	}
+	
+	private void toNextPage(){
+		Intent intent = new Intent(LoadingActivity.this, WXEntryActivity.class);
+		startActivity(intent);
+		finish();
+	}
 
+	private AnimatorListener mAnimatorListener = new AnimatorListener() {
+		@Override
+		public void onAnimationStart(Animator animation) {
+		}
+		@Override
+		public void onAnimationRepeat(Animator animation) {
+		}
+		@Override
+		public void onAnimationEnd(Animator animation) {
+			toNextPage();
+		}
+		@Override
+		public void onAnimationCancel(Animator animation) {
+		}
+	};
 	
 	
 	@Override

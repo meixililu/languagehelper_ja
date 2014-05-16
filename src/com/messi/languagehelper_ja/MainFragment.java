@@ -27,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.baidu.mobstat.StatService;
 import com.iflytek.cloud.speech.RecognizerListener;
@@ -35,7 +34,6 @@ import com.iflytek.cloud.speech.RecognizerResult;
 import com.iflytek.cloud.speech.SpeechError;
 import com.iflytek.cloud.speech.SpeechRecognizer;
 import com.iflytek.cloud.speech.SpeechSynthesizer;
-import com.messi.languagehelper_ja.CollectedFragment.WaitTask;
 import com.messi.languagehelper_ja.adapter.CollectedListItemAdapter;
 import com.messi.languagehelper_ja.bean.DialogBean;
 import com.messi.languagehelper_ja.db.DataBaseUtil;
@@ -61,7 +59,7 @@ public class MainFragment extends Fragment implements OnClickListener, IWXAPIEve
 
 	private EditText input_et;
 	private FrameLayout submit_btn;
-	private LinearLayout baidu_translate;
+	private LinearLayout baidu_translate,baidu_tranlate_prompt;
 	private FrameLayout clear_btn_layout;
 	private Button voice_btn;
 	private LinearLayout speak_round_layout;
@@ -140,13 +138,16 @@ public class MainFragment extends Fragment implements OnClickListener, IWXAPIEve
 		voice_btn = (Button) view.findViewById(R.id.voice_btn);
 		
 		boolean IsHasShowBaiduMessage = mSharedPreferences.getBoolean(SharedPreferencesUtil.IsHasShowBaiduMessage, false);
+		View listviewFooter = mInflater.inflate(R.layout.listview_item_recent_used_footer, null);
+		baidu_tranlate_prompt = (LinearLayout) listviewFooter.findViewById(R.id.baidu_tranlate_prompt);
 		if(!IsHasShowBaiduMessage){
-			View listviewFooter = mInflater.inflate(R.layout.listview_item_recent_used_footer, null);
 			baidu_translate = (LinearLayout) listviewFooter.findViewById(R.id.baidu_translate);
-			recent_used_lv.addFooterView(listviewFooter);
-			SharedPreferencesUtil.saveBoolean(mSharedPreferences, SharedPreferencesUtil.IsHasShowBaiduMessage, true);
 			baidu_translate.setOnClickListener(this);
+			SharedPreferencesUtil.saveBoolean(mSharedPreferences, SharedPreferencesUtil.IsHasShowBaiduMessage, true);
+		}else{
+			baidu_tranlate_prompt.setVisibility(View.GONE);
 		}
+		recent_used_lv.addFooterView(listviewFooter);
 		
 		mSpeechSynthesizer = SpeechSynthesizer.createSynthesizer(getActivity());
 		recognizer = SpeechRecognizer.createRecognizer(getActivity());
@@ -179,13 +180,13 @@ public class MainFragment extends Fragment implements OnClickListener, IWXAPIEve
 		if (v.getId() == R.id.submit_btn_layout) {
 			hideIME();
 			submit();
-			StatService.onEvent(getActivity(), "1.6_fanyibtn", "翻译按钮", 1);
+			StatService.onEvent(getActivity(), "1.0_fanyibtn", "翻译按钮", 1);
 		}else if (v.getId() == R.id.speak_round_layout) {
 			showIatDialog();
-			StatService.onEvent(getActivity(), "1.6_shuohuabtn", "说话按钮", 1);
+			StatService.onEvent(getActivity(), "1.0_shuohuabtn", "说话按钮", 1);
 		}else if (v.getId() == R.id.clear_btn_layout) {
 			input_et.setText("");
-			StatService.onEvent(getActivity(), "1.6_clearbtn", "清空按钮", 1);
+			StatService.onEvent(getActivity(), "1.0_clearbtn", "清空按钮", 1);
 		}else if (v.getId() == R.id.baidu_translate) {
 			try {
 				Intent intent = new Intent("android.intent.action.VIEW", Uri.parse("http://fanyi.baidu.com"));
@@ -201,7 +202,7 @@ public class MainFragment extends Fragment implements OnClickListener, IWXAPIEve
 			}else{
 				ToastUtil.diaplayMesShort(getActivity(), "请说普通话");
 			}
-			StatService.onEvent(getActivity(), "1.6_putonghuabtn", "普通话按钮", 1);
+			StatService.onEvent(getActivity(), "1.0_putonghuabtn", "普通话按钮", 1);
 		}else if (v.getId() == R.id.cb_speak_language_en) {
 			cb_speak_language_ch.setChecked(true);
 			cb_speak_language_en.setChecked(false);
@@ -209,7 +210,7 @@ public class MainFragment extends Fragment implements OnClickListener, IWXAPIEve
 //			cb_speak_language_ch.setChecked(false);
 //			setSpeakLanguage(XFUtil.VoiceEngineEN);
 //			ToastUtil.diaplayMesShort(getActivity(), "请说英语");
-//			StatService.onEvent(getActivity(), "1.6_yingyubtn", "英语按钮", 1);
+			StatService.onEvent(getActivity(), "1.0_riyubtn", "日语按钮", 1);
 		}
 	}
 	
@@ -303,51 +304,95 @@ public class MainFragment extends Fragment implements OnClickListener, IWXAPIEve
 		WXEntryActivity.mWXEntryActivity.setSupportProgressBarIndeterminateVisibility(true);
 		WXEntryActivity.mWXEntryActivity.setSupportProgressBarVisibility(true);
 		submit_btn.setEnabled(false);
-		if(StringUtils.isChinese(Settings.q)){
-			Settings.from = "zh";
-			Settings.to = "jp";
-		}else{
-			Settings.from = "jp";
-			Settings.to = "zh";
-		}
-		LogUtil.DefalutLog("Settings.from:"+Settings.from+"---Settings.to:"+Settings.to);
-		RequestParams mRequestParams = new RequestParams();
-		mRequestParams.put("client_id", Settings.client_id);
-		mRequestParams.put("q", Settings.q);
-		mRequestParams.put("from", Settings.from);
-		mRequestParams.put("to", Settings.to);
-		LanguagehelperHttpClient.post(mRequestParams, new TextHttpResponseHandler() {
-			@Override
-			public void onFinish() {
-				super.onFinish();
-				WXEntryActivity.mWXEntryActivity.setSupportProgressBarIndeterminateVisibility(false);
-				WXEntryActivity.mWXEntryActivity.setSupportProgressBarVisibility(false);
-				submit_btn.setEnabled(true);
+//		if(Settings.Translate_engine.equals(Settings.Translate_engine_google)){
+//			if(StringUtils.isChinese(Settings.q)){
+//				Settings.from = Settings.from_hl_zh;
+//				Settings.to = Settings.to_ja;
+//			}else{
+//				Settings.from = Settings.from_hl_ja;
+//				Settings.to = Settings.to_zh;
+//			}
+//			String url = Settings.URL_TEMPLATE + Settings.from + Settings.to + Settings.q;
+//			LogUtil.DefalutLog("Settings.from:"+Settings.from+"---Settings.to:"+Settings.to +"---url:"+url);
+//			LanguagehelperHttpClient.get_google_translate(url ,null, new TextHttpResponseHandler() {
+//				@Override
+//				public void onFinish() {
+//					super.onFinish();
+//					WXEntryActivity.mWXEntryActivity.setSupportProgressBarIndeterminateVisibility(false);
+//					WXEntryActivity.mWXEntryActivity.setSupportProgressBarVisibility(false);
+//					submit_btn.setEnabled(true);
+//				}
+//				@Override
+//				public void onFailure(int statusCode, Header[] headers,String responseString, Throwable throwable) {
+//					showToast("网络连接错误("+statusCode+")");
+//				}
+//				@Override
+//				public void onSuccess(int statusCode, Header[] headers, String responseString) {
+//					if (!TextUtils.isEmpty(responseString)) {
+//						LogUtil.DefalutLog(responseString);
+//						dstString = JsonParser.getTranslateResult(responseString);
+//						if (dstString.contains("error_msg:")) {
+//							showToast(dstString);
+//						} else {
+//							currentDialogBean = new DialogBean(dstString, Settings.q);
+//							long newRowId = mDataBaseUtil.insert(currentDialogBean);
+//							beans.add(0,currentDialogBean);
+//							mAdapter.notifyDataSetChanged();
+//							recent_used_lv.setSelection(0);
+//							LogUtil.DefalutLog("mDataBaseUtil:"+currentDialogBean.toString());
+//						}
+//					} else {
+//						showToast("网络连接错误，请稍后再试！");
+//					}
+//				}
+//			});
+//		}else{
+			if(StringUtils.isChinese(Settings.q)){
+				Settings.from = "zh";
+				Settings.to = "jp";
+			}else{
+				Settings.from = "jp";
+				Settings.to = "zh";
 			}
-			@Override
-			public void onFailure(int statusCode, Header[] headers,String responseString, Throwable throwable) {
-				showToast("网络连接错误("+statusCode+")");
-			}
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, String responseString) {
-				if (!TextUtils.isEmpty(responseString)) {
-					LogUtil.DefalutLog(responseString);
-					dstString = JsonParser.getTranslateResult(responseString);
-					if (dstString.contains("error_msg:")) {
-						showToast(dstString);
-					} else {
-						currentDialogBean = new DialogBean(dstString, Settings.q);
-						long newRowId = mDataBaseUtil.insert(currentDialogBean);
-						beans.add(0,currentDialogBean);
-						mAdapter.notifyDataSetChanged();
-						recent_used_lv.setSelection(0);
-						LogUtil.DefalutLog("mDataBaseUtil:"+currentDialogBean.toString());
-					}
-				} else {
-					showToast("网络连接错误，请稍后再试！");
+			LogUtil.DefalutLog("Settings.from:"+Settings.from+"---Settings.to:"+Settings.to);
+			RequestParams mRequestParams = new RequestParams();
+			mRequestParams.put("client_id", Settings.client_id);
+			mRequestParams.put("q", Settings.q);
+			mRequestParams.put("from", Settings.from);
+			mRequestParams.put("to", Settings.to);
+			LanguagehelperHttpClient.post(mRequestParams, new TextHttpResponseHandler() {
+				@Override
+				public void onFinish() {
+					super.onFinish();
+					WXEntryActivity.mWXEntryActivity.setSupportProgressBarIndeterminateVisibility(false);
+					WXEntryActivity.mWXEntryActivity.setSupportProgressBarVisibility(false);
+					submit_btn.setEnabled(true);
 				}
-			}
-		});
+				@Override
+				public void onFailure(int statusCode, Header[] headers,String responseString, Throwable throwable) {
+					showToast("网络连接错误("+statusCode+")");
+				}
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, String responseString) {
+					if (!TextUtils.isEmpty(responseString)) {
+						LogUtil.DefalutLog(responseString);
+						dstString = JsonParser.getTranslateResult(responseString);
+						if (dstString.contains("error_msg:")) {
+							showToast(dstString);
+						} else {
+							currentDialogBean = new DialogBean(dstString, Settings.q);
+							long newRowId = mDataBaseUtil.insert(currentDialogBean);
+							beans.add(0,currentDialogBean);
+							mAdapter.notifyDataSetChanged();
+							recent_used_lv.setSelection(0);
+							LogUtil.DefalutLog("mDataBaseUtil:"+currentDialogBean.toString());
+						}
+					} else {
+						showToast("网络连接错误，请稍后再试！");
+					}
+				}
+			});
+//		}
 		
 	}
 

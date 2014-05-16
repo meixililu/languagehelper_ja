@@ -13,5 +13,9 @@ public class LanguagehelperHttpClient {
 	public static void post(RequestParams params, AsyncHttpResponseHandler responseHandler) {
 		client.post(Settings.baiduUrl, params, responseHandler);
 	}
+	
+	public static void get_google_translate(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+		client.get(url, params, responseHandler);
+	}
 
 }
